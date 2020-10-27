@@ -21,8 +21,9 @@ Changed_behaviour <- c(11, 14, 11, 5,
                        13, 21, 11, 6)
 Proportion <- Changed_behaviour/n
 
+
 # Preliminary Analysis
-par(mfrow = c(2,2))
+par(mfrow = c(2, 2))
 plot(Age, Proportion)
 #1) As the age group increases they are less likely to change their behaviour
 plot(Severe, Proportion)
@@ -31,16 +32,28 @@ plot(Severe, Proportion)
 plot(Gender, Proportion)
 #3) Female are more likely to change their behaviour
 plot(Information, Proportion)
-#4) The person who believes there is more information available about swine 
+#4) The person who believes there is more information available about swine
 #flu are more likely to change their behaviour
+
+#From the plot, we can see there is a potential outlier
 
 #Logistic model
 y <- cbind(Changed_behaviour, n - Changed_behaviour)
-glm1 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age), family = binomial(link = logit))
+#Additive model
+glm1 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age),
+    family = binomial(link = logit)
+  )
 summary(glm1)
 
+#Forward selection
 #Interaction Term Gender and Severe
-glminteraction1 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Severe), family = binomial(link = logit))
+glminteraction1 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Severe),
+    family = binomial(link = logit)
+  )
 summary(glminteraction1)
 #Also the p-value is not significant (ie, 0.83763 > 0.05)
 anova(glm1, glminteraction1)
@@ -49,7 +62,11 @@ anova(glm1, glminteraction1)
 
 
 #Interaction Term Gender and Information
-glminteraction2 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Information), family = binomial(link = logit))
+glminteraction2 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Information),
+    family = binomial(link = logit)
+  )
 summary(glminteraction2)
 #Also the p-value is not significant (ie, 0.25108 > 0.05)
 anova(glm1, glminteraction2)
@@ -59,7 +76,11 @@ anova(glm1, glminteraction2)
 
 
 #Interaction Term Gender and Age
-glminteraction3 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Age), family = binomial(link = logit))
+glminteraction3 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Gender) * factor(Age),
+    family = binomial(link = logit)
+  )
 summary(glminteraction3)
 #Also all the p-value is not significant
 anova(glm1, glminteraction3)
@@ -68,7 +89,11 @@ anova(glm1, glminteraction3)
 
 
 #Interaction Term Severe and Information
-glminteraction4 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information), family = binomial(link = logit))
+glminteraction4 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information),
+    family = binomial(link = logit)
+  )
 summary(glminteraction4)
 #Also all the p-value is significant ie 0.02263 < 0.05
 anova(glm1, glminteraction4)
@@ -77,19 +102,27 @@ anova(glm1, glminteraction4)
 
 
 
-#Interaction Term Severe and Age added 
-glminteraction5 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information) + factor(Severe) * factor(Age), family = binomial(link = logit))
+#Interaction Term Severe and Age added
+glminteraction5 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information) + factor(Severe) * factor(Age),
+    family = binomial(link = logit)
+  )
 summary(glminteraction5)
-#Also all the p-value are not significant 
+#Also all the p-value are not significant
 anova(glminteraction4, glminteraction5)
 #Df deviance is lesser than the chi-square value in Table (ie) 7.815 > 2.9344
 #So remove the interaction term factor(Severe) * factor(Age) for the next model
 
 
-#Interaction Term Severe and Age added 
-glminteraction6 <- glm(y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information) + factor(Information) * factor(Age), family = binomial(link = logit))
+#Interaction Term Severe and Age added
+glminteraction6 <-
+  glm(
+    y ~ factor(Gender) + factor(Severe) + factor(Information) + factor(Age) + factor(Severe) * factor(Information) + factor(Information) * factor(Age),
+    family = binomial(link = logit)
+  )
 summary(glminteraction6)
-#Also all the p-value are not significant 
+#Also all the p-value are not significant
 anova(glminteraction4, glminteraction6)
 #Df deviance is lesser than the chi-square value in Table (ie) 7.815 > 0.85032
 #So remove the interaction term factor(Severe) * factor(Age) for the next model
@@ -98,13 +131,14 @@ anova(glminteraction4, glminteraction6)
 #Diagnostics for the final model
 
 h <- lm.influence(glminteraction4)$hat
-rpear <- residuals(glminteraction4, "pearson")/sqrt(1-h)
-rdev <- residuals(glminteraction4, "deviance")/sqrt(1-h)
+rpear <- residuals(glminteraction4, "pearson") / sqrt(1 - h)
+rdev <- residuals(glminteraction4, "deviance") / sqrt(1 - h)
 phat <- glminteraction4$fitted.values
 UsingFitted <- n * phat
-DiagonisticsDF <- data.frame(Changed_behaviour, UsingFitted, n, phat, h, rpear, rdev)
+DiagonisticsDF <-
+  data.frame(Changed_behaviour, UsingFitted, n, phat, h, rpear, rdev)
 
-par(mfrow = c(1,1))
+par(mfrow = c(1, 1))
 plot(rpear, main = "Index plot of Pearson Residuals")
 plot(rdev, main = "Index plot of Deviance Residuals")
 
@@ -112,12 +146,13 @@ plot(glminteraction4$linear.predictors, rpear, main = "Plot of Pearson Residuals
 plot(glminteraction4$linear.predictors, rdev, main = "Plot of Pearson Residuals vs Linear Predictors")
 
 #High leverage cases
-plot(h, ylim = c(0,0.5))
+plot(h, ylim = c(0, 0.5))
 abline(h = 0.5)
 #No high leverage cases
 
 #High influence cases
-D <- rpear * rpear * h / (2*(1-h))
+#Cook's distance
+D <- rpear * rpear * h / (2 * (1 - h))
 plot(D)
 identify(D)
 #Case 15 and 20 are high influence cases
@@ -126,3 +161,25 @@ identify(D)
 plot(rpear)
 identify(rpear)
 #Case 20 is an outlier
+#This case had all members changed behaviours
+
+summary(glminteraction4)
+#chi square value is 36.415 > than summary value 32.582
+#Thus, Multiplicative model is better fit than the additive model.
+
+#overdispersion
+#Formula for overdispersion is deviance/ n-p
+
+32.582 / (32-7)
+# 1.30328 the value is almost equal to 1. Thus there is no overdispersion
+
+#Sparse data
+summary(glminteraction4)
+#Number of Fisher Scoring iterations: 4
+#The std. Errors are smaller
+#Thus, there is no sparse data
+
+
+
+
+
