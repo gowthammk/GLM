@@ -2,11 +2,11 @@
 
 The data wer collected on a random sample of people to ascertain what factors influenced change during a Swine Flu outbreak. The variables collected were:
 
--*Behaviour*   - Whether the person changed behaviour relating to hygiene(yes or no).
--*Gender*      - Gender of the person.
--*Age*         - Age category of the person.
--*Severe*      - Whether the person believed the consequence of contracting Swine Flu were severe.
--*Information* - Whether the person believed the information about Swinr Flu was adequate.
+1. *Behaviour*   - Whether the person changed behaviour relating to hygiene(yes or no).
+2. *Gender*      - Gender of the person.
+3. *Age*         - Age category of the person.
+4. *Severe*      - Whether the person believed the consequence of contracting Swine Flu were severe.
+5. *Information* - Whether the person believed the information about Swinr Flu was adequate.
 
 
 Tasks:
