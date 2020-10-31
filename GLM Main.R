@@ -1,3 +1,5 @@
+# Task 1: Read the data unto R using seperate vectors Gender, Severe, Information, Age, 
+# number of people, number of people that changed behaviour. Apply appropriate numeric codes.
 #Dataset Creation
 Gender <- rep(c(1, 0), each = 16)
 Severe <- rep(c(1, 0), each = 8, times = 2)
@@ -21,7 +23,7 @@ Changed_behaviour <- c(11, 14, 11, 5,
                        13, 21, 11, 6)
 Proportion <- Changed_behaviour/n
 
-
+#Task 2: Conduct primilinary analyses and draw tentative conclusions.
 # Preliminary Analysis
 par(mfrow = c(2, 2))
 plot(Age, Proportion)
@@ -37,7 +39,12 @@ plot(Information, Proportion)
 
 #From the plot, we can see there is a potential outlier
 
+#Task 3:  Fit a logistic regression model to the numbers of behaviour changes using 
+#the other four variables as explanatory variables. Use forward selection to consider 
+#all possible two-way interactions. Use likelihood ratio test to assess the
+# significance of these interactions.
 #Logistic model
+
 y <- cbind(Changed_behaviour, n - Changed_behaviour)
 #Additive model
 glm1 <-
@@ -127,7 +134,13 @@ anova(glminteraction4, glminteraction6)
 #Df deviance is lesser than the chi-square value in Table (ie) 7.815 > 0.85032
 #So remove the interaction term factor(Severe) * factor(Age) for the next model
 
+# Task 4: Present the final model.
 #The final model is the 4th model -  glminteraction4
+
+# Task 5: Perform diagnostics, presenting appropriate measures and graphics in an appendix. 
+# Interpret and suggest appropriate actions, if any. 
+# Are there any issues with overdispersion or sparse data? 
+# Interpret in terms of your final model(significance, direction and size of effect).
 #Diagnostics for the final model
 
 h <- lm.influence(glminteraction4)$hat
@@ -159,13 +172,18 @@ identify(D)
 
 #Outlier
 plot(rpear)
+abline(h = c(-2,2))
 identify(rpear)
 #Case 20 is an outlier
+#Case 15 is almost an outlier
+rpear[5]
+rpear[15]
+rpear[20]
 #This case had all members changed behaviours
 
 summary(glminteraction4)
 #chi square value is 36.415 > than summary value 32.582
-#Thus, Multiplicative model is better fit than the additive model.
+#This, Multiplicative model which has (factor(Severe) * factor(Information)) is a good fit.
 
 #overdispersion
 #Formula for overdispersion is deviance/ n-p
@@ -180,6 +198,37 @@ summary(glminteraction4)
 #Thus, there is no sparse data
 
 
+#Interpretation of significance, direction, size of effect of final model
+summary(glminteraction4)
+#Gender
+exp(-0.20409)
+1 - exp(-0.20409)
+#Males are 18.46% less likely to change the behavior than female
+#p-value is 0.16863, which is greater than 0.05. Thus not significant
 
+#Age
+exp(-0.08784)
+1 - exp(-0.08784)
+# People of age group between 40 and 50 are 8.409% less likely to 
+# change their behaviour than people of age group between 0 and 40
+# P-value is 0.66543, which is greater than 0.05. Thus not significant
 
+exp(-0.50742)
+1 - exp(-0.50742)
+# People of age group between 50 and 60 are 39.79% less likely to 
+# change their behaviour than people of age group between 0 and 40
+#P-value is 0.01856, which is less than 0.05. Thus it is significant
 
+exp(-0.68213)
+1 - exp(-0.68213)
+# People of age group above 60 are 49.44% less likely to 
+# change their behaviour than people of age group between 0 and 40
+# P-value is 0.00407, which is less than 0.05. Thus it is significant.
+
+#interaction term
+exp(0.68915)
+exp(0.68915) - 1
+# People who believed that contracting swine flu were severe and who believed the information
+# about swine flu was adequate are 99.202% more likely to change their behavior than
+# people who believed that contracting swine flu were not severe and who believed the
+# information about swine flu was not adequate
