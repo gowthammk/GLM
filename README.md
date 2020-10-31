@@ -1,6 +1,6 @@
 # GENERALIZED LINEAR MODELLING
 
-The data wer collected on a random sample of people to ascertain what factors influenced change during a Swine Flu outbreak. The variables collected were:
+The data were collected on a random sample of people to ascertain what factors influenced change during a Swine Flu outbreak. The variables collected were:
 
 1. *Behaviour*   - Whether the person changed behaviour relating to hygiene(yes or no).
 2. *Gender*      - Gender of the person.
