@@ -14,7 +14,7 @@ Task 1: Read the data unto R using seperate vectors Gender, Severe, Information,
 
 Task 2: Conduct primilinary analyses and draw tentative conclusions.
 
-Task 3: Fit a logistic regression model to the numbers of behaviour changes usig the other four variables as explanatory variables. Use forward selection to consider all possible two-way interactions. Use likelihood ratio test to assess the significance of these interactions.
+Task 3: Fit a logistic regression model to the numbers of behaviour changes using the other four variables as explanatory variables. Use forward selection to consider all possible two-way interactions. Use likelihood ratio test to assess the significance of these interactions.
 
 Task 4: Present the final model.
 
