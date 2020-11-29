@@ -1,4 +1,4 @@
-# GENERALIZED LINEAR MODELLING
+## Statistical Modelling of Swine Flu Outbreak Data
 
 The data were collected on a random sample of people to ascertain what factors influenced change during a Swine Flu outbreak. The variables collected were:
 
